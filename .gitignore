@@ -1,0 +1,8 @@
+*.zip
+*.tar.gz
+*.log
+*.pt
+train/
+dev/
+test/
+00*/
