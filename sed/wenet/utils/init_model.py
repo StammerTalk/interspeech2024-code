@@ -32,6 +32,9 @@ from wenet.efficient_conformer.encoder import EfficientConformerEncoder
 from wenet.paraformer.paraformer import Paraformer
 from wenet.cif.predictor import Predictor
 from wenet.utils.cmvn import load_cmvn
+from wenet.stutter.convlstm import ConvLSTM
+from wenet.stutter.stutternet import StutterNet
+from wenet.transformer.wav2vec2_encoder import S3prlFrontend
 
 
 def init_model(configs):
@@ -45,6 +48,15 @@ def init_model(configs):
 
     input_dim = configs['input_dim']
     vocab_size = configs['output_dim']
+
+    if configs.get('convlstm', False):
+        model = ConvLSTM(vocab_size=vocab_size,
+                            global_cmvn=global_cmvn,
+                            **configs['convlstm_conf'])
+        return model
+    if configs.get('stutternet', False):
+        model = StutterNet(vocab_size=vocab_size,)
+        return model
 
     encoder_type = configs.get('encoder', 'conformer')
     decoder_type = configs.get('decoder', 'bitransformer')
@@ -72,6 +84,8 @@ def init_model(configs):
         encoder = EBranchformerEncoder(input_dim,
                                        global_cmvn=global_cmvn,
                                        **configs['encoder_conf'])
+    elif encoder_type == "wav2vec2":
+        encoder = S3prlFrontend(**configs['frontend_conf'])
     else:
         encoder = TransformerEncoder(input_dim,
                                      global_cmvn=global_cmvn,
@@ -130,14 +144,7 @@ def init_model(configs):
                            **configs['model_conf'])
     else:
         print(configs)
-        if configs.get('lfmmi_dir', '') != '':
-            model = K2Model(vocab_size=vocab_size,
-                            encoder=encoder,
-                            decoder=decoder,
-                            ctc=ctc,
-                            lfmmi_dir=configs['lfmmi_dir'],
-                            **configs['model_conf'])
-        elif configs.get('sed', False):
+        if configs.get('sed', False):
             model = SEDModel(vocab_size=vocab_size,
                              encoder=encoder)
         else:

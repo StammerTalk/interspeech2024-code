@@ -1,6 +1,6 @@
 # Wenet Wenetspeech finetuning
 
-This code is based on [Wenet](https://github.com/wenet-e2e/wenet) (git commit: 188e5e9c2c3250f4ed44af4a09d2a8866e4a0ab6). Please check `run.sh`.
+This code is based on [Wenet](https://github.com/wenet-e2e/wenet) (git commit: 188e5e9c2c3250f4ed44af4a09d2a8866e4a0ab6).
 
 We finetuned the Conformer Wenetspeech pretrained model with the train and dev splits, and evaluate on the test split.
 
@@ -32,4 +32,4 @@ all       |command     :    WER= 3.32% N= 35343 C= 34350 D= 306 S= 687 I= 181
 all       |all         :    WER= 6.24% N= 95442 C= 91401 D=1637 S=2404 I=1917
 ```
 
-On all levels and categories, the finetuning achieved 35.73% WERR.
+On all levels and categories, the finetuning achieved 58.4% WERR.

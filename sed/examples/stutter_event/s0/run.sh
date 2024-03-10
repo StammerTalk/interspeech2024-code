@@ -27,6 +27,7 @@ train_set=train
 dev_set=dev
 test_sets="test/mild/A test/mild/P test/moderate/A test/moderate/P test/severe/A test/severe/P"
 
+# We can choose train_convlstm.yaml, train_stutternet.yaml, train_wav2vec2.yaml
 train_config=conf/train_conformer.yaml
 cmvn=true
 dir=exp/conformer

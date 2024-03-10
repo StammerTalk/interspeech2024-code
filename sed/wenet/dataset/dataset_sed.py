@@ -17,7 +17,6 @@ import random
 import torch
 import torch.distributed as dist
 from torch.utils.data import IterableDataset
-
 import wenet.dataset.processor as processor
 import wenet.dataset.processor_sed as processor_sed
 from wenet.utils.file_utils import read_lists
@@ -154,13 +153,15 @@ def Dataset(data_type,
         dataset = Processor(dataset, processor.speed_perturb)
 
     feats_type = conf.get('feats_type', 'fbank')
-    assert feats_type in ['fbank', 'mfcc']
+    assert feats_type in ['fbank', 'mfcc', 'wav2vec2']
     if feats_type == 'fbank':
         fbank_conf = conf.get('fbank_conf', {})
         dataset = Processor(dataset, processor.compute_fbank, **fbank_conf)
     elif feats_type == 'mfcc':
         mfcc_conf = conf.get('mfcc_conf', {})
         dataset = Processor(dataset, processor.compute_mfcc, **mfcc_conf)
+    elif feats_type == 'wav2vec2':
+        dataset = Processor(dataset, processor.compute_wav2vec2)
 
     spec_aug = conf.get('spec_aug', True)
     spec_sub = conf.get('spec_sub', False)
